@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"github.com/dgrijalva/jwt-go" // upgrade github.com/golang-jwt/jwt/v5
+	"github.com/golang-jwt/jwt"
 )
 
 type Claims struct {
