@@ -1,6 +1,8 @@
-package usershandler
+package usershdl
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/ports"
 )
@@ -22,7 +24,11 @@ func (handler *userHttpHandler) RegistryRoutes(router *gin.Engine) {
 }
 
 func (handler *userHttpHandler) Get(c *gin.Context) {
-	user, err := handler.userService.Get(1)
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(500, gin.H{"error": err.Error()})
+	}
+	user, err := handler.userService.Get(uint(id))
 	if err != nil {
 		c.AbortWithStatusJSON(500, gin.H{"error": err.Error()})
 		return

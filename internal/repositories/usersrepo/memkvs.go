@@ -1,4 +1,4 @@
-package usersrepository
+package usersrepo
 
 import (
 	"encoding/json"
@@ -16,6 +16,14 @@ func NewRepository() *userRepository {
 }
 
 func (repository *userRepository) Get(id uint) (domain.User, error) {
+	if value, ok := repository.kvs[id]; ok {
+		game := domain.User{}
+		err := json.Unmarshal(value, &game)
+		if err != nil {
+			return domain.User{}, errors.New("fail to get value from kvs")
+		}
+		return game, nil
+	}
 	return domain.User{}, nil
 }
 
