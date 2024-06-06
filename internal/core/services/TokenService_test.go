@@ -1,42 +1,39 @@
 package services_test
 
 import (
+	"errors"
+	"fmt"
 	"testing"
+	"time"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/domain"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/services"
 )
 
-var service = services.NewJWTService()
+var service = services.NewTokenService()
 
-func TestLogin(t *testing.T) {
-	token, err := service.Login(domain.Claims{})
-	if err != nil {
-		t.Fatal(err)
+func TestCreateToken(t *testing.T) {
+	roleList := []string{"default", "user", "operator", "monitor", "supervisor", "admin"}
+	for _, role := range roleList {
+		createTokenRoleTest(t, role)
 	}
-	t.Log(token)
 }
 
-func TestMe(t *testing.T) {
-	token, err := service.Me(domain.Claims{})
-	if err != nil {
-		t.Fatal(err)
+func createTokenRoleTest(t *testing.T, role string) error {
+	fmt.Printf("Running tests with %v Role\n", role)
+	claims := domain.Claims{
+		Role: role,
+		StandardClaims: jwt.StandardClaims{
+			IssuedAt:  time.Now().Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),
+		},
 	}
-	t.Log(token)
-}
-
-func TestRefresh(t *testing.T) {
-	token, err := service.Refresh(domain.Claims{})
+	fmt.Printf("\tClaims %v\n", claims)
+	_, err := service.NewAccessToken(claims)
 	if err != nil {
-		t.Fatal(err)
+		claimErr := fmt.Errorf("Fail for claims %v", claims)
+		t.Fatal(errors.Join(claimErr, err))
 	}
-	t.Log(token)
-}
-
-func TestLogout(t *testing.T) {
-	token, err := service.Logout(domain.Claims{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Log(token)
+	return nil
 }
