@@ -25,3 +25,15 @@ func (service *jwtService) Login(claims domain.Claims) (string, error) {
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
 	return accessToken.SignedString([]byte(service.jwt_secret))
 }
+
+func (service *jwtService) Me(claims domain.Claims) (string, error) {
+	return "", nil
+}
+
+func (service *jwtService) Refresh(claims domain.Claims) (string, error) {
+	return "", nil
+}
+
+func (service *jwtService) Logout(claims domain.Claims) (string, error) {
+	return "", nil
+}
