@@ -1,21 +1,15 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/cmd"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/services"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/handlers/usershandler"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/usersrepo"
 )
 
 func main() {
-
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file: %s", err)
-	}
+	cmd.StartupEnv()
 
 	router := gin.Default()
 
