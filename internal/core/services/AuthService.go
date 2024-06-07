@@ -2,9 +2,11 @@ package services
 
 import (
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/domain"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/ports"
 )
 
 type authService struct {
+	repository ports.AuthRepository
 }
 
 func NewAuthService() *authService {
