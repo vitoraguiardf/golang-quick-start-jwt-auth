@@ -52,7 +52,7 @@ func (handler *CLICobraHandler) loginCommand() *cobra.Command {
 			if len(username) <= 0 {
 				fmt.Println("username:")
 				if value, err := reader.ReadString('\n'); err == nil {
-					username = value
+					username = strings.Trim(value, "\n")
 				} else {
 					log.Fatal(err)
 				}
