@@ -4,12 +4,14 @@ import (
 	"testing"
 
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/services"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/authrepository"
 )
 
-var authService = services.NewAuthService()
+var authRepository = authrepository.NewKvsRepository()
+var authService = services.NewAuthService(authRepository)
 
 func TestAuthServiceLogin(t *testing.T) {
-	_, err := authService.Login()
+	_, err := authService.Login("abc", "cdb")
 	if err != nil {
 		t.Error(err)
 	}
