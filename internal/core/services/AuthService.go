@@ -37,7 +37,7 @@ func (service *authService) Login(username string, password string) (string, err
 		},
 	}
 	//
-	if token, err := service.jwtService.NewAccessToken(claims); err != nil {
+	if token, err := service.jwtService.Create(claims); err != nil {
 		return "", err
 	} else {
 		return token, nil

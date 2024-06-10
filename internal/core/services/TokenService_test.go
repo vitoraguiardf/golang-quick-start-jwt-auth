@@ -2,7 +2,6 @@ package services_test
 
 import (
 	"errors"
-	"fmt"
 	"testing"
 	"time"
 
@@ -11,19 +10,45 @@ import (
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/services"
 )
 
-var service = services.NewTokenService()
+var (
+	service                                = services.NewTokenService()
+	currentAccessToken                     = ""
+	currentClaims      *jwt.StandardClaims = nil
+)
 
-func TestNewAccessToken(t *testing.T) {
-	claims := domain.Claims{
+func TestCreate(t *testing.T) {
+	initialClaims := domain.Claims{
 		Roles: []string{"default", "user", "operator", "monitor", "supervisor", "admin"},
 		StandardClaims: jwt.StandardClaims{
 			IssuedAt:  time.Now().Unix(),
 			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),
 		},
 	}
-	_, err := service.NewAccessToken(claims)
+	token, err := service.Create(initialClaims)
 	if err != nil {
-		claimErr := fmt.Errorf("Fail for claims %v", claims)
-		t.Fatal(errors.Join(claimErr, err))
+		t.Fatal(err)
 	}
+	currentAccessToken = token
+}
+
+func TestParse(t *testing.T) {
+	claims, err := service.Parse(currentAccessToken)
+	if err != nil {
+		t.Fatal(err)
+	}
+	currentClaims = claims
+}
+
+func TestValidate(t *testing.T) {
+	if !service.Validate(currentAccessToken) {
+		t.Fatal(errors.New("Invalid Token"))
+	}
+}
+
+func TestRefresh(t *testing.T) {
+	token, err := service.Refresh(currentAccessToken)
+	if err != nil {
+		t.Fatal(err)
+	}
+	currentAccessToken = token
 }
