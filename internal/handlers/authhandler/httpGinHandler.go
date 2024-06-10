@@ -16,10 +16,11 @@ func NewHttpHandler(authService ports.AuthService) *HTTPGinHandler {
 }
 
 func (handler *HTTPGinHandler) RegistryRoutes(router *gin.Engine) {
-	router.POST("/login", handler.Login)
-	router.POST("/refresh", handler.Refresh)
-	router.POST("/me", handler.Me)
-	router.POST("/logout", handler.Logout)
+	authRouter := router.Group("/auth")
+	authRouter.POST("/login", handler.Login)
+	authRouter.POST("/refresh", handler.Refresh)
+	authRouter.POST("/me", handler.Me)
+	authRouter.POST("/logout", handler.Logout)
 }
 
 func (handler *HTTPGinHandler) Login(c *gin.Context) {
