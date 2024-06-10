@@ -28,6 +28,7 @@ var rootCommand = &cobra.Command{
 	Short: "Commands for Auth",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Help()
 	},
 }
 
