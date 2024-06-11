@@ -30,7 +30,7 @@ func (service *authService) Login(username string, password string) (string, err
 		return "", errors.New("incorrect password")
 	}
 	claims := domain.Claims{
-		Roles: []string{"default", "user", "operator", "monitor", "supervisor", "admin"},
+		Role: "default", // "default", "user", "operator", "monitor", "supervisor", "admin"
 		StandardClaims: jwt.StandardClaims{
 			IssuedAt:  time.Now().Unix(),
 			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),
