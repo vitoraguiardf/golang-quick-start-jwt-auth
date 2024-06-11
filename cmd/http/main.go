@@ -20,7 +20,7 @@ func main() {
 	authHandler := authhandler.NewHttpHandler(authService)
 	authHandler.RegistryRoutes(router)
 
-	userRepository := usersrepo.NewKvsRepository()
+	userRepository := usersrepo.NewSqliteRepository()
 	userService := services.NewUserService(userRepository)
 	userHandler := usershandler.NewHttpHandler(userService)
 	userHandler.RegistryRoutes(router)
