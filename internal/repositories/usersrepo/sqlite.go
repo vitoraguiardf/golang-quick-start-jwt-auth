@@ -1,0 +1,52 @@
+package usersrepo
+
+import (
+	"fmt"
+
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/domain"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/persistence"
+	"gorm.io/gorm"
+)
+
+type sqliteRepository struct {
+	DB *gorm.DB
+}
+
+func NewSqliteRepository() *sqliteRepository {
+	return &sqliteRepository{
+		DB: persistence.SqliteDB,
+	}
+}
+
+func (repo *sqliteRepository) Create(user *domain.User) (err error) {
+	res := repo.DB.Create(user)
+	affected := res.RowsAffected
+	if affected == 1 {
+		return nil
+	}
+	return fmt.Errorf("%v rows affected when expexted only one", affected)
+}
+
+func (repo *sqliteRepository) FindAll() (*[]domain.User, error) {
+	var items []domain.User
+	repo.DB.Find(items)
+	return &items, nil
+}
+
+func (repo *sqliteRepository) FindById(id uint) (*domain.User, error) {
+	var user domain.User
+	repo.DB.Where("ID = ?", id).First(&user)
+	return &user, nil
+}
+
+func (repo *sqliteRepository) Update(id uint, model *domain.User) (err error) {
+	return nil
+}
+
+func (repo *sqliteRepository) Replace(id uint, model *domain.User) (err error) {
+	return nil
+}
+
+func (repo *sqliteRepository) Delete(id uint) (err error) {
+	return nil
+}

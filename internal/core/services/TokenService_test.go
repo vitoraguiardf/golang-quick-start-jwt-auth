@@ -18,7 +18,7 @@ var (
 
 func TestCreate(t *testing.T) {
 	initialClaims := domain.Claims{
-		Roles: []string{"default", "user", "operator", "monitor", "supervisor", "admin"},
+		Role: "default", // "default", "user", "operator", "monitor", "supervisor", "admin"
 		StandardClaims: jwt.StandardClaims{
 			IssuedAt:  time.Now().Unix(),
 			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),

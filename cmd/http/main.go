@@ -7,12 +7,14 @@ import (
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/handlers/authhandler"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/handlers/usershandler"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/authrepository"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/persistence"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/usersrepo"
 )
 
 func main() {
 	cmd.StartupEnv()
 
+	persistence.NewSqliteDB().InitDB()
 	router := gin.Default()
 
 	authRepository := authrepository.NewKvsRepository()
@@ -20,7 +22,7 @@ func main() {
 	authHandler := authhandler.NewHttpHandler(authService)
 	authHandler.RegistryRoutes(router)
 
-	userRepository := usersrepo.NewRepository()
+	userRepository := usersrepo.NewSqliteRepository()
 	userService := services.NewUserService(userRepository)
 	userHandler := usershandler.NewHttpHandler(userService)
 	userHandler.RegistryRoutes(router)

@@ -11,20 +11,20 @@ type userRepository struct {
 	kvs map[uint][]byte
 }
 
-func NewRepository() *userRepository {
+func NewKvsRepository() *userRepository {
 	return &userRepository{kvs: map[uint][]byte{}}
 }
 
 func (repository *userRepository) Get(id uint) (domain.User, error) {
 	if value, ok := repository.kvs[id]; ok {
-		game := domain.User{}
-		err := json.Unmarshal(value, &game)
+		user := domain.User{}
+		err := json.Unmarshal(value, &user)
 		if err != nil {
 			return domain.User{}, errors.New("fail to get value from kvs")
 		}
-		return game, nil
+		return user, nil
 	}
-	return domain.User{}, nil
+	return domain.User{}, errors.New("user not found")
 }
 
 func (repostory *userRepository) Save(user domain.User) error {
