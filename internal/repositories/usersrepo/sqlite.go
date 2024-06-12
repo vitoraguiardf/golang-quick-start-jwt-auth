@@ -24,7 +24,7 @@ func (repo *sqliteRepository) Create(user *domain.User) (err error) {
 	if affected == 1 {
 		return nil
 	}
-	return fmt.Errorf("%v rows affected when expexted only one", affected)
+	return fmt.Errorf("%v rows affected when expected only one", affected)
 }
 
 func (repo *sqliteRepository) FindAll() (map[string]domain.User, error) {
