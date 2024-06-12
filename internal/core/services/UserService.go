@@ -26,7 +26,7 @@ func (service *userService) Create(user *domain.User) error {
 	return nil
 }
 
-func (service *userService) FindAll() (*[]domain.User, error) {
+func (service *userService) FindAll() (map[string]domain.User, error) {
 	if items, err := service.repository.FindAll(); err != nil {
 		return nil, err
 	} else {

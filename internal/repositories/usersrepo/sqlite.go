@@ -27,10 +27,10 @@ func (repo *sqliteRepository) Create(user *domain.User) (err error) {
 	return fmt.Errorf("%v rows affected when expexted only one", affected)
 }
 
-func (repo *sqliteRepository) FindAll() (*[]domain.User, error) {
-	var items []domain.User
-	repo.DB.Find(items)
-	return &items, nil
+func (repo *sqliteRepository) FindAll() (map[string]domain.User, error) {
+	items := map[string]domain.User{}
+	repo.DB.Find(&items)
+	return items, nil
 }
 
 func (repo *sqliteRepository) FindById(id uint) (*domain.User, error) {
