@@ -1,8 +1,10 @@
 package ports
 
-import "github.com/golang-jwt/jwt"
+import (
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/domain"
+)
 
 type AuthRepository interface {
-	Get(id uint) (jwt.Token, error)
-	Save(jwt.Token) error
+	ExistsByEmail(email string) (exists bool)
+	FindUserByEmail(email string) (user *domain.User, err error)
 }

@@ -2,56 +2,65 @@ package services
 
 import (
 	"errors"
-	"time"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/domain"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/ports"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/utils"
 )
 
 type authService struct {
-	repository ports.AuthRepository
-	jwtService jwtService
+	repository   ports.AuthRepository
+	tokenService jwtService
 }
 
 func NewAuthService(authRepository ports.AuthRepository) *authService {
 	return &authService{
-		repository: authRepository,
-		jwtService: *NewTokenService(),
+		repository:   authRepository,
+		tokenService: *NewTokenService(),
 	}
 }
 
-func (service *authService) Login(username string, password string) (string, error) {
-	// TODO Login - credentials validation
-	if username != "vitoraguiardf" {
+func (s *authService) Login(credentials domain.Credentials) (string, error) {
+	var user *domain.User = nil
+	if !s.repository.ExistsByEmail(credentials.Email) {
 		return "", errors.New("user not found")
 	}
-	if password != "123" {
-		return "", errors.New("incorrect password")
+	if r, err := s.repository.FindUserByEmail(credentials.Email); err != nil {
+		return "", err
+	} else {
+		user = r
 	}
-	claims := domain.Claims{
-		Role: "default", // "default", "user", "operator", "monitor", "supervisor", "admin"
-		StandardClaims: jwt.StandardClaims{
-			IssuedAt:  time.Now().Unix(),
-			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),
-		},
+	if user == nil {
+		return "", errors.New("auth service has failed")
 	}
-	//
-	if token, err := service.jwtService.Create(claims); err != nil {
+	if err := checkCredentials(*user, credentials); err != nil {
+		return "", err
+	}
+	if token, err := s.tokenService.Create(user.Claims()); err != nil {
 		return "", err
 	} else {
 		return token, nil
 	}
 }
 
-func (service *authService) Me() (domain.User, error) {
+func (s *authService) Me() (domain.User, error) {
 	return domain.User{}, nil
 }
 
-func (service *authService) Refresh() (string, error) {
+func (s *authService) Refresh() (string, error) {
 	return "Successful refresh!", nil
 }
 
-func (service *authService) Logout() (string, error) {
+func (s *authService) Logout() (string, error) {
 	return "Successful logout!", nil
+}
+
+func checkCredentials(u domain.User, c domain.Credentials) error {
+	if u.Email != c.Email {
+		return errors.New("invalid email adress")
+	}
+	if err := utils.HashCompare(u.Password, c.Password); err != nil {
+		return errors.New("invalid password")
+	}
+	return nil
 }

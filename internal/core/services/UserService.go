@@ -7,6 +7,7 @@ import (
 
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/domain"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/ports"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/utils"
 )
 
 type userService struct {
@@ -20,6 +21,11 @@ func NewUserService(userRepository ports.UserRepository) *userService {
 }
 
 func (service *userService) Create(user *domain.User) error {
+	if pwd, err := utils.HashCreate(user.Password); err != nil {
+		return err
+	} else {
+		user.Password = pwd
+	}
 	if err := service.repository.Create(user); err != nil {
 		return err
 	}

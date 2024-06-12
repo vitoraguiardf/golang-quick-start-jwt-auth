@@ -5,7 +5,7 @@ import (
 )
 
 type AuthService interface {
-	Login(username string, password string) (string, error)
+	Login(domain.Credentials) (string, error)
 	Me() (domain.User, error)
 	Refresh() (string, error)
 	Logout() (string, error)

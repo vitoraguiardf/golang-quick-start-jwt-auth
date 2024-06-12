@@ -22,7 +22,7 @@ var rootCommand = &cobra.Command{
 
 func Execute() {
 	cmd.StartupEnv()
-	authRepository := authrepository.NewKvsRepository()
+	authRepository := authrepository.NewSqliteRepository()
 	authService := services.NewAuthService(authRepository)
 	authHandler := authhandler.NewCLIHandler(authService)
 	authHandler.RegistyCommands(rootCommand)

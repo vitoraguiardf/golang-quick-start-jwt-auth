@@ -17,7 +17,7 @@ func main() {
 	persistence.NewSqliteDB().InitDB()
 	router := gin.Default()
 
-	authRepository := authrepository.NewKvsRepository()
+	authRepository := authrepository.NewSqliteRepository()
 	authService := services.NewAuthService(authRepository)
 	authHandler := authhandler.NewHttpHandler(authService)
 	authHandler.RegistryRoutes(router)

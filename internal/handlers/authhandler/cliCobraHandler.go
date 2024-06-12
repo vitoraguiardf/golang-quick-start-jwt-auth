@@ -9,6 +9,7 @@ import (
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/domain"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/ports"
 	"golang.org/x/term"
 )
@@ -62,7 +63,7 @@ func (handler *CLICobraHandler) loginCommand() *cobra.Command {
 			if bytePassword, err := term.ReadPassword(int(syscall.Stdin)); err == nil {
 				password := strings.TrimSpace(string(bytePassword))
 				fmt.Printf("Running Login to %v!\n", username)
-				if token, err := handler.authService.Login(username, password); err != nil {
+				if token, err := handler.authService.Login(domain.Credentials{username, password}); err != nil {
 					fmt.Printf("Login fails with error: %v\n", err)
 				} else {
 					fmt.Printf("Login successful!\nToken: %v\n", token)

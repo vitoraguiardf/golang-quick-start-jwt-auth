@@ -2,6 +2,7 @@ package authhandler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/domain"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/ports"
 )
 
@@ -15,30 +16,40 @@ func NewHttpHandler(authService ports.AuthService) *HTTPGinHandler {
 	}
 }
 
-func (handler *HTTPGinHandler) RegistryRoutes(router *gin.Engine) {
+func (h *HTTPGinHandler) RegistryRoutes(router *gin.Engine) {
 	authRouter := router.Group("/auth")
-	authRouter.POST("/login", handler.Login)
-	authRouter.POST("/refresh", handler.Refresh)
-	authRouter.POST("/me", handler.Me)
-	authRouter.POST("/logout", handler.Logout)
+	authRouter.POST("/login", h.Login)
+	authRouter.POST("/refresh", h.Refresh)
+	authRouter.POST("/me", h.Me)
+	authRouter.POST("/logout", h.Logout)
 }
 
-func (handler *HTTPGinHandler) Login(c *gin.Context) {
+func (h *HTTPGinHandler) Login(c *gin.Context) {
+	var credentials domain.Credentials
+	if err := c.ShouldBind(&credentials); err != nil {
+		c.AbortWithStatusJSON(422, gin.H{"error": err.Error()})
+		return
+	}
+	if token, err := h.authService.Login(credentials); err != nil {
+		c.AbortWithStatusJSON(401, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(200, gin.H{"token": token})
+		return
+	}
+}
+
+func (h *HTTPGinHandler) Refresh(c *gin.Context) {
 	// TODO
 	c.AbortWithStatusJSON(503, gin.H{"error": "Feature in Development"})
 }
 
-func (handler *HTTPGinHandler) Refresh(c *gin.Context) {
+func (h *HTTPGinHandler) Me(c *gin.Context) {
 	// TODO
 	c.AbortWithStatusJSON(503, gin.H{"error": "Feature in Development"})
 }
 
-func (handler *HTTPGinHandler) Me(c *gin.Context) {
-	// TODO
-	c.AbortWithStatusJSON(503, gin.H{"error": "Feature in Development"})
-}
-
-func (handler *HTTPGinHandler) Logout(c *gin.Context) {
+func (h *HTTPGinHandler) Logout(c *gin.Context) {
 	// TODO
 	c.AbortWithStatusJSON(503, gin.H{"error": "Feature in Development"})
 }
