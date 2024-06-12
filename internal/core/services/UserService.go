@@ -80,7 +80,7 @@ func (service *userService) Delete(idParam string) error {
 }
 
 func parseIdParam(idParam string) (id uint, err error) {
-	if match, err := regexp.MatchString("/[0-9]/", idParam); err != nil {
+	if match, err := regexp.MatchString("^[0-9]+$", idParam); err != nil {
 		return 0, err
 	} else if !match {
 		return 0, errors.New("invalid value for id param")

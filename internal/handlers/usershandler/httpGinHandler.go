@@ -37,7 +37,7 @@ func (handler *HTTPGinHandler) Create(c *gin.Context) {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(201, gin.H{"created": fmt.Sprintf("/users/%v", &model.ID)})
+	c.JSON(201, gin.H{"created": fmt.Sprintf("/users/%v", int(model.ID))})
 }
 
 func (handler *HTTPGinHandler) FindAll(c *gin.Context) {
