@@ -31,3 +31,9 @@ func (repo *sqliteRepository) FindUserByEmail(email string) (*domain.User, error
 	}
 	return user, nil
 }
+
+func (repo *sqliteRepository) FindUser(id uint) (*domain.User, error) {
+	var user domain.User
+	repo.DB.Where("ID = ?", id).First(&user)
+	return &user, nil
+}

@@ -7,4 +7,5 @@ import (
 type AuthRepository interface {
 	ExistsByEmail(email string) (exists bool)
 	FindUserByEmail(email string) (user *domain.User, err error)
+	FindUser(id uint) (user *domain.User, err error)
 }
