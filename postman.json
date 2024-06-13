@@ -1,0 +1,186 @@
+{
+	"info": {
+		"_postman_id": "546181e7-bc24-4142-a8a9-a786a18d8ae2",
+		"name": "Golang App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19181771"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"console.log(jsonData);\r",
+									"pm.collectionVariables.set(\"authorization\", jsonData.AccessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "Email",
+									"value": "vitoraguiar.df@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "Password",
+									"value": "password@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url_base}}/auth/login",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url_base}}/auth/me",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_base}}/users/1",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "Name",
+									"value": "Vitor Aguiar",
+									"type": "text"
+								},
+								{
+									"key": "Email",
+									"value": "vitoraguiar.df@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "Password",
+									"value": "password@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url_base}}/users",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authorization}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url_base",
+			"value": "http://127.0.0.1:8080",
+			"type": "string"
+		},
+		{
+			"key": "authorization",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
