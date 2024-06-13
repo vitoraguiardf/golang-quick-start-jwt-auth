@@ -16,9 +16,9 @@ func NewSqliteDB() *sqliteDB {
 	var _name string
 	_name = os.Getenv("DB_DATABASE")
 	if len(_name) >= 0 {
-		_name = os.Getenv("APP_NAME") + ".db"
+		_name = os.Getenv("APP_NAME")
 		if len(_name) >= 0 {
-			_name = "golang.db"
+			_name = "golang"
 		}
 	}
 	return &sqliteDB{
@@ -29,7 +29,7 @@ func NewSqliteDB() *sqliteDB {
 var SqliteDB *gorm.DB
 
 func (c *sqliteDB) InitDB() error {
-	db, err := gorm.Open(sqlite.Open(c.name), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(c.name+".db"), &gorm.Config{})
 	if err != nil {
 		return err
 	}
