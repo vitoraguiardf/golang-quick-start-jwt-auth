@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/domain"
-	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/persistence"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/database/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -14,7 +14,7 @@ type sqliteRepository struct {
 
 func NewSqliteRepository() *sqliteRepository {
 	return &sqliteRepository{
-		DB: persistence.SqliteDB,
+		DB: sqlite.SqliteDB,
 	}
 }
 
