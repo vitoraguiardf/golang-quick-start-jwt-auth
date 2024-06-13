@@ -24,7 +24,7 @@ func (u *User) Claims() *Claims {
 		Role:   u.Role, // "default", "user", "operator", "monitor", "supervisor", "admin"
 		StandardClaims: jwt.StandardClaims{
 			IssuedAt:  time.Now().Unix(),
-			ExpiresAt: time.Now().Add(time.Second * 15).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),
 		},
 	}
 }

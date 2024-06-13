@@ -20,38 +20,49 @@ func NewAuthService(authRepository ports.AuthRepository) *authService {
 	}
 }
 
-func (s *authService) Login(credentials domain.Credentials) (string, error) {
+func (s *authService) Login(credentials domain.Credentials) (*domain.Token, error) {
 	var user *domain.User = nil
 	if !s.repository.ExistsByEmail(credentials.Email) {
-		return "", errors.New("user not found")
+		return nil, errors.New("user not found")
 	}
 	if r, err := s.repository.FindUserByEmail(credentials.Email); err != nil {
-		return "", err
+		return nil, err
 	} else {
 		user = r
 	}
 	if user == nil {
-		return "", errors.New("auth service has failed")
+		return nil, errors.New("auth service has failed")
 	}
 	if err := checkCredentials(*user, credentials); err != nil {
-		return "", err
+		return nil, err
 	}
-	if token, err := s.tokenService.Create(user.Claims()); err != nil {
-		return "", err
+	if authorization, err := s.tokenService.Create(user.Claims()); err != nil {
+		return nil, err
 	} else {
-		return token, nil
+		return authorization, nil
 	}
 }
 
-func (s *authService) Me() (domain.User, error) {
-	return domain.User{}, nil
+func (s *authService) Me(authorization string) (*domain.User, error) {
+	claims, err := s.tokenService.ParseClaims(authorization)
+	if err != nil {
+		return nil, err
+	}
+	if err := claims.Valid(); err != nil {
+		return nil, err
+	}
+	user, err := s.repository.FindUser(claims.UserId)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
-func (s *authService) Refresh() (string, error) {
-	return "Successful refresh!", nil
+func (s *authService) Refresh(authorization string) (*domain.Token, error) {
+	return s.tokenService.Refresh(authorization)
 }
 
-func (s *authService) Logout() (string, error) {
+func (s *authService) Logout(authorization string) (string, error) {
 	return "Successful logout!", nil
 }
 

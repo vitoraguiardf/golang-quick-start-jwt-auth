@@ -28,7 +28,7 @@ func TestCreate(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	currentAccessToken = token
+	currentAccessToken = token.AccessToken
 }
 
 func TestParse(t *testing.T) {
@@ -50,5 +50,5 @@ func TestRefresh(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	currentAccessToken = token
+	currentAccessToken = token.AccessToken
 }
