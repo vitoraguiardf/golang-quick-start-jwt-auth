@@ -1,18 +1,21 @@
 package domain
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
-	Name     string `json:"name" binding:"required"`
-	Email    string `json:"email" gorm:"unique" binding:"required"`
-	Password string `json:"password" binding:"required"`
-	Role     string `json:"role"`
+	ID        uint `gorm:"primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt sql.NullTime `json:"-" gorm:"index"`
+	Name      string       `json:"name" binding:"required"`
+	Email     string       `json:"email" gorm:"unique" binding:"required"`
+	Password  string       `json:"-" binding:"required"`
+	Role      string       `json:"role"`
 }
 
 func (u *User) Claims() *Claims {
