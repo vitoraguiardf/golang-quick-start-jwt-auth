@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/cmd"
@@ -17,7 +18,8 @@ var rootCommand = &cobra.Command{
 	Short: "Command Line Interface",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Wellcome to the jungle!")
+		appName := os.Getenv("APP_NAME")
+		fmt.Printf("Wellcome to the %v!\n", appName)
 	},
 }
 
