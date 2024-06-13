@@ -36,22 +36,40 @@ func (h *HTTPGinHandler) Login(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	} else {
-		c.JSON(http.StatusOK, gin.H{"token": token})
+		c.JSON(http.StatusOK, token)
 		return
 	}
 }
 
 func (h *HTTPGinHandler) Refresh(c *gin.Context) {
-	// TODO
-	c.AbortWithStatusJSON(http.StatusServiceUnavailable, gin.H{"error": "Feature in Development"})
+	authorization := c.GetHeader("Authorization")
+	if token, err := h.authService.Refresh(authorization); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusOK, token)
+		return
+	}
 }
 
 func (h *HTTPGinHandler) Me(c *gin.Context) {
-	// TODO
-	c.AbortWithStatusJSON(http.StatusServiceUnavailable, gin.H{"error": "Feature in Development"})
+	authorization := c.GetHeader("Authorization")
+	if user, err := h.authService.Me(authorization); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusOK, user)
+		return
+	}
 }
 
 func (h *HTTPGinHandler) Logout(c *gin.Context) {
-	// TODO
-	c.AbortWithStatusJSON(http.StatusServiceUnavailable, gin.H{"error": "Feature in Development"})
+	authorization := c.GetHeader("Authorization")
+	if message, err := h.authService.Logout(authorization); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{"message": message})
+		return
+	}
 }
