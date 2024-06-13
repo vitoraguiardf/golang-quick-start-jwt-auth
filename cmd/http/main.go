@@ -1,20 +1,20 @@
-package main
+package http
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/cmd"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/core/services"
+	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/database/sqlite"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/handlers/authhandler"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/handlers/usershandler"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/authrepository"
-	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/persistence"
 	"github.com/vitoraguiardf/golang-quick-start-jwt-auth/internal/repositories/usersrepo"
 )
 
-func main() {
+func Run() {
 	cmd.StartupEnv()
 
-	persistence.NewSqliteDB().InitDB()
+	sqlite.NewSqliteDB().InitDB()
 	router := gin.Default()
 
 	authRepository := authrepository.NewSqliteRepository()
